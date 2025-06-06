@@ -1,0 +1,77 @@
+-- Create the database
+CREATE DATABASE IF NOT EXISTS `student_feedback` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+USE `student_feedback`;
+
+-- Table: students
+CREATE TABLE `students` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `photo` VARCHAR(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` VARCHAR(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_students_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: teachers
+CREATE TABLE `teachers` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password` VARCHAR(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `subject` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_teachers_email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: parents
+CREATE TABLE `parents` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `email` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `student_id` INT(11) DEFAULT NULL,
+  `password` VARCHAR(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idx_parents_email` (`email`),
+  KEY `idx_parents_student` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: attendance
+CREATE TABLE `attendance` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `student_id` INT(11) NOT NULL,
+  `teacher_id` INT(11) NOT NULL,
+  `total_classes` INT(11) NOT NULL,
+  `attended_classes` INT(11) NOT NULL,
+  `subject` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_attendance_student` (`student_id`),
+  KEY `idx_attendance_teacher` (`teacher_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: teacher_feedback
+CREATE TABLE `teacher_feedback` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `teacher_id` INT(11) DEFAULT NULL,
+  `student_id` INT(11) DEFAULT NULL,
+  `subject` VARCHAR(100) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `rating` INT(11) DEFAULT NULL,
+  `feedback` TEXT COLLATE utf8mb4_general_ci,
+  `timestamp` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_tfeedback_teacher` (`teacher_id`),
+  KEY `idx_tfeedback_student` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Table: parent_feedback
+CREATE TABLE `parent_feedback` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `parent_id` INT(11) DEFAULT NULL,
+  `student_id` INT(11) DEFAULT NULL,
+  `feedback` TEXT COLLATE utf8mb4_general_ci,
+  `timestamp` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_pfeedback_parent` (`parent_id`),
+  KEY `idx_pfeedback_student` (`student_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
